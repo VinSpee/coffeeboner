@@ -23,29 +23,31 @@ module.exports = function (grunt) {
 
 	grunt.initConfig({
 		yeoman: yeomanConfig,
+
 		watch: {
 			coffee: {
 				files: ['<%= yeoman.app %>/scripts/{,*/}*.coffee'],
-		tasks: ['coffee:dist']
+				tasks: ['coffee:dist']
 			},
-		coffeeTest: {
-			files: ['test/spec/{,*/}*.coffee'],
-		tasks: ['coffee:test']
+			coffeeTest: {
+				files: ['test/spec/{,*/}*.coffee'],
+				tasks: ['coffee:test']
+			},
+			compass: {
+				files: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
+				tasks: ['compass']
+			},
+			livereload: {
+				files: [
+					'<%= yeoman.app %>/*.html',
+					'{.tmp,<%= yeoman.app %>}/styles/{,*/}*.css',
+					'{.tmp,<%= yeoman.app %>}/scripts/{,*/}*.js',
+					'<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,webp}'
+				],
+				tasks: ['livereload']
+			}
 		},
-		compass: {
-			files: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
-		tasks: ['compass']
-		},
-		livereload: {
-			files: [
-		'<%= yeoman.app %>/*.html',
-												'{.tmp,<%= yeoman.app %>}/styles/{,*/}*.css',
-		'{.tmp,<%= yeoman.app %>}/scripts/{,*/}*.js',
-		'<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,webp}'
-			],
-		tasks: ['livereload']
-		}
-		},
+
 		connect: {
 			options: {
 				port: 9000,
@@ -83,26 +85,30 @@ module.exports = function (grunt) {
 				}
 			}
 		},
+
 		open: {
 			server: {
 				path: 'http://localhost:<%= connect.options.port %>'
 			}
 		},
+
 		clean: {
 			dist: ['.tmp', '<%= yeoman.dist %>/*'],
 			server: '.tmp'
 		},
+
 		jshint: {
 			options: {
-			jshintrc: '.jshintrc'
+				jshintrc: '.jshintrc'
 			},
 			all: [
 				'Gruntfile.js',
 				'<%= yeoman.app %>/scripts/{,*/}*.js',
-	'!<%= yeoman.app %>/scripts/vendor/*',
+				'!<%= yeoman.app %>/scripts/vendor/*',
 				'test/spec/{,*/}*.js'
 			]
 		},
+
 		mocha: {
 			all: {
 				options: {
@@ -111,6 +117,7 @@ module.exports = function (grunt) {
 				}
 			}
 		},
+
 		coffee: {
 			dist: {
 				files: [{
@@ -132,6 +139,7 @@ module.exports = function (grunt) {
 				}]
 			}
 		},
+
 		compass: {
 			options: {
 				require: ['modular-scale', 'susy'],
@@ -150,11 +158,13 @@ module.exports = function (grunt) {
 				}
 			}
 		},
+
 		// not used since Uglify task does concat,
 		// but still available if needed
 		/*concat: {
 			dist: {}
 			},*/
+
 		requirejs: {
 			dist: {
 				// Options: https://github.com/jrburke/r.js/blob/master/build/example.build.js
@@ -174,12 +184,14 @@ module.exports = function (grunt) {
 				}
 			}
 		},
+
 		useminPrepare: {
 			html: '<%= yeoman.app %>/index.html',
 			options: {
 				dest: '<%= yeoman.dist %>'
 			}
 		},
+
 		usemin: {
 			html: ['<%= yeoman.dist %>/{,*/}*.html'],
 			css: ['<%= yeoman.dist %>/styles/{,*/}*.css'],
@@ -187,6 +199,7 @@ module.exports = function (grunt) {
 				dirs: ['<%= yeoman.dist %>']
 			}
 		},
+
 		imagemin: {
 			dist: {
 				files: [{
@@ -197,16 +210,18 @@ module.exports = function (grunt) {
 				}]
 			}
 		},
+
 		cssmin: {
 			dist: {
 				files: {
 					'<%= yeoman.dist %>/styles/main.css': [
 						'.tmp/styles/{,*/}*.css',
-					'<%= yeoman.app %>/styles/{,*/}*.css'
-						]
+						'<%= yeoman.app %>/styles/{,*/}*.css'
+					]
 				}
 			}
 		},
+
 		htmlmin: {
 			dist: {
 				options: {
@@ -228,6 +243,7 @@ module.exports = function (grunt) {
 				}]
 			}
 		},
+
 		copy: {
 			dist: {
 				files: [{
@@ -237,11 +253,12 @@ module.exports = function (grunt) {
 					dest: '<%= yeoman.dist %>',
 					src: [
 						'*.{ico,txt}',
-					'.htaccess'
-						]
+						'.htaccess'
+					]
 				}]
 			}
 		},
+
 		bower: {
 			all: {
 				rjsConfig: '<%= yeoman.app %>/scripts/main.js'
@@ -264,35 +281,35 @@ module.exports = function (grunt) {
 			'connect:livereload',
 			'open',
 			'watch'
-			]);
+		]);
 	});
 
 	grunt.registerTask('test', [
-			'clean:server',
-			'coffee',
-			'compass',
-			'connect:test',
-			'mocha'
-			]);
+		'clean:server',
+		'coffee',
+		'compass',
+		'connect:test',
+		'mocha'
+	]);
 
 	grunt.registerTask('build', [
-			'clean:dist',
-			'coffee',
-			'compass:dist',
-			'useminPrepare',
-			'requirejs',
-			'imagemin',
-			'htmlmin',
-			'concat',
-			'cssmin',
-			'uglify',
-			'copy',
-			'usemin'
-			]);
+		'clean:dist',
+		'coffee',
+		'compass:dist',
+		'useminPrepare',
+		'requirejs',
+		'imagemin',
+		'htmlmin',
+		'concat',
+		'cssmin',
+		'uglify',
+		'copy',
+		'usemin'
+	]);
 
 	grunt.registerTask('default', [
-			'jshint',
-			'test',
-			'build'
-			]);
+		'jshint',
+		'test',
+		'build'
+	]);
 };
